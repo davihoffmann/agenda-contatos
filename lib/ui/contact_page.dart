@@ -14,13 +14,16 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-
-  bool _userEdited = false;
-  Contact _editedContact;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+
+  final _nameFocus = FocusNode();
+
+  bool _userEdited = false;
+  Contact _editedContact;
 
   Contact get contact => widget.contact;
 
@@ -48,10 +51,17 @@ class _ContactPageState extends State<ContactPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
         backgroundColor: Colors.indigo,
-        onPressed: () {},
+        onPressed: _onClickSave,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(10),
+      body: _body(),
+    );
+  }
+
+  SingleChildScrollView _body() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(10),
+      child: Form(
+        key: _formKey,
         child: Column(
           children: <Widget>[
             GestureDetector(
@@ -70,8 +80,14 @@ class _ContactPageState extends State<ContactPage> {
               ),
               onTap: () {},
             ),
-            TextField(
+            TextFormField(
               controller: _nameController,
+              validator: (value) {
+                if (value.isEmpty || value == null) {
+                  return "O nome deve ser informado";
+                }
+              },
+              focusNode: _nameFocus,
               decoration: InputDecoration(
                 labelText: "Nome",
               ),
@@ -82,7 +98,7 @@ class _ContactPageState extends State<ContactPage> {
                 });
               },
             ),
-            TextField(
+            TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: "E-mail",
@@ -93,7 +109,7 @@ class _ContactPageState extends State<ContactPage> {
               },
               keyboardType: TextInputType.emailAddress,
             ),
-            TextField(
+            TextFormField(
               controller: _phoneController,
               decoration: InputDecoration(
                 labelText: "Phone",
@@ -108,5 +124,13 @@ class _ContactPageState extends State<ContactPage> {
         ),
       ),
     );
+  }
+
+  void _onClickSave() {
+    if (!_formKey.currentState.validate()) {
+      FocusScope.of(context).requestFocus(_nameFocus);
+      return;
+    }
+    Navigator.pop(context, _editedContact);
   }
 }

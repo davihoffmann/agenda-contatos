@@ -107,11 +107,13 @@ class _HomePageState extends State<HomePage> {
     final recContact = await Navigator.push(context,
         MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
 
+
+
     if (recContact != null) {
       if (contact != null) {
         await helper.updateContact(recContact);
       } else {
-        await helper.saveContact(contact);
+        await helper.saveContact(recContact);
       }
       _getAllContacts();
     }
