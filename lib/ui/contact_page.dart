@@ -43,17 +43,20 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        title: Text(_editedContact.name ?? "Novo Contato"),
+    return WillPopScope(
+      onWillPop: _requestPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          title: Text(_editedContact.name ?? "Novo Contato"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.save),
+          backgroundColor: Colors.indigo,
+          onPressed: _onClickSave,
+        ),
+        body: _body(),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save),
-        backgroundColor: Colors.indigo,
-        onPressed: _onClickSave,
-      ),
-      body: _body(),
     );
   }
 
@@ -132,5 +135,37 @@ class _ContactPageState extends State<ContactPage> {
       return;
     }
     Navigator.pop(context, _editedContact);
+  }
+
+  Future<bool> _requestPop() {
+    if (_userEdited) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Descartar alterações?"),
+            content: Text("Se você sair as alterações serão perdidas."),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancelar"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text("Sim"),
+              ),
+            ],
+          );
+        },
+      );
+      return Future.value(false);
+    } else {
+      return Future.value(true);
+    }
   }
 }
