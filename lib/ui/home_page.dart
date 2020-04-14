@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                   image: DecorationImage(
                     image: contact.img != null
                         ? FileImage(File(contact.img))
-                        : Image.asset("assets/images/person-sem-image.png"),
+                        : Image.asset("assets/images/person-sem-image.png").image,
                   ),
                 ),
               ),
