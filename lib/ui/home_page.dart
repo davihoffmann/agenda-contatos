@@ -99,7 +99,91 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      onTap: () => _showContactPage(contact: contact),
+      onTap: () => _showOptions(context, contact),
+    );
+  }
+
+  void _showOptions(BuildContext context, Contact contact) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: null,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.phone, size: 40, color: Colors.indigo),
+                          SizedBox(width: 10),
+                          Text(
+                            "Ligar",
+                            style:
+                                TextStyle(color: Colors.indigo, fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showContactPage(contact: contact);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.edit, size: 40, color: Colors.indigo),
+                          SizedBox(width: 10),
+                          Text(
+                            "Editar",
+                            style:
+                                TextStyle(color: Colors.indigo, fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: FlatButton(
+                      onPressed: () {
+                        helper.deleteContact(contact.id);
+                        setState(() {
+                          contacts.remove(contact);
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.delete, size: 40, color: Colors.indigo),
+                          SizedBox(width: 10),
+                          Text(
+                            "Excluir",
+                            style:
+                                TextStyle(color: Colors.indigo, fontSize: 20),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -124,5 +208,4 @@ class _HomePageState extends State<HomePage> {
       });
     });
   }
-
 }
