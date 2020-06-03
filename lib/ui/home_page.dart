@@ -51,6 +51,9 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
         backgroundColor: Colors.indigo,
       ),
+      //body: Container(
+        //child: Image.memory(base64Decode('')),
+      //)
       body: Container(
         padding: EdgeInsets.all(10),
         child: ListView.builder(
